@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>EOG Well Data</title>
+	<style>
+	html { margin:0; padding:0; font-size:62.5%; }
+	body { max-width:800px; min-width:300px; margin:0 auto; padding:20px 10px; font-size:14px; font-size:1.4em; }
+	h1 { font-size:1.8em; }
+	.demo { overflow:auto; border:1px solid silver; min-height:300px; }
+	</style>
+	<link rel="stylesheet" href="https://stugs.com/eogtree/jstree/dist/themes/default/style.min.css" />
+</head>
+<body>
+
+	<img src="https://www.eogresources.com/wp-content/uploads/2018/10/logo_color.png">
+	<div id="data" class="demo"></div>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://stugs.com/eogtree/jstree/dist/jstree.min.js"></script>
+
+	<script>
+	// inline data demo
+	$('#data').jstree({
+		'plugins':["checkbox","theme","types"],
+		'checkbox': {
+			three_state: false},
+		'core' : {
+			'data' : [
+			STUFF
+			]
+		},
+		"types" : {
+			"root" : {
+				"icon" : "https://cdn01.boxcdn.net/_assets/img/favicons/favicon-16x16-Ypcbzb.png"
+			}
+		}
+	});
+	$('#data').on('deselect_node.jstree', function(e, data) {
+					$.ajax({
+									type: "GET",
+									url: "/?email=" + encodeURIComponent(document.myform.email.value) + "&endshare=" + data.node.id
+					});
+	});
+	$('#data').on('select_node.jstree', function(e, data) {
+					$.ajax({
+									type: "GET",
+									url: "/?email=" + encodeURIComponent(document.myform.email.value) +"&startshare=" + data.node.id
+					});
+	});
+	$('#data').on('ready.jstree', function() {
+    		$("#data").jstree("open_node",$("#root_60798796555"));
+	});
+	</script>
+
+	<form method=get name="myform" onsubmit='return submitform()'>
+	<input type="hidden" id="tree" name="selectedValue" value="" />
+	Email Address:  <input type="text" name="email" value="matt+free@glaves.org">
+	</form>
+
+</body>
+</html>
